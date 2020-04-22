@@ -76,4 +76,10 @@ io.on('connection', function (socket) {
 //  console.log('Listening on ' +server.address().port);
 //});
 
-server.listen(process.env.PORT);
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8081;
+}
+server.listen(port, function () {
+  console.log('Listening on ' +server.address().port);
+  });
