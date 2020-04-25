@@ -55,7 +55,7 @@ io.on('connection', function (socket) {
   
   socket.on("send letters", function(data){
     for(var i = 0; i < p; i++) {
-      msg = [players[(i+k)%p], letters[players[(i+k)%p]]];
+      msg = [players[(i+k)%p], letters[players[(i+k)%p]], k];
       io.to(players[i]).emit('send letter', msg);
     }
     k = k + 1;

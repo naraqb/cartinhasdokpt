@@ -13,7 +13,8 @@
         <br>
         <br>
         <br>
-        <br>
+        <p id="rou">Round: 0</p>
+        <br>        
         <form id="messageForm">	
             <br>
             <input type="text" id="d" placeholder="" disabled/>
@@ -52,6 +53,7 @@
 
         $(function(){
             var $nplayers = $("#pr");
+            var $round = $("#rou");
             var $dica = $("#d");
             var $people = $("#people");
             var $messageForm = $("#messageForm"); //ref to the div message form
@@ -90,6 +92,8 @@
                 letter = data[1];
                 var btn = document.getElementById("btn");
                 btn.disabled = false;
+                $round.text('Round: ' + data[2]); 
+
                 $dica.val(letter[letter.length - 1]);
                 if (letter.length > 1){
                     $dica.val(letter[letter.length - 1]);
@@ -174,6 +178,18 @@
             border: 6px solid white;
         }
         #pr{
+            margin-left: 0px;
+            text-align:left;
+            border-radius:0px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #rou{
             margin-left: 0px;
             text-align:left;
             border-radius:0px;
