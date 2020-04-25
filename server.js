@@ -66,7 +66,7 @@ io.on('connection', function (socket) {
     letters = {};
     k = 1;
     letters_received = 0;
-    game_over = 2;
+    game_over = 5;
     for(var i = 0; i < p; i++) {
       letters[players[i]] = []
     }
