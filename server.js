@@ -16,8 +16,6 @@ app.get('/', function (req, res) {
 
 players = [];
 letters = {};
-k = 0;
-letters_received = 0;
 
 io.on('connection', function (socket) {
   console.log('someone connected: ', socket.id);
@@ -41,21 +39,23 @@ io.on('connection', function (socket) {
 
     if(letters_received == p){
       for(var i = 0; i < p; i++) {
-        msg = [players[(i+k)%p], letters[players[(i+k)%p]], k];
+        msg = [players[(i+k)%p], letters[players[(i+k)%p]], k, game_over];
         io.to(players[i]).emit('send letter', msg);
       }
       k = k + 1;
       letters_received = 0;
     }
 
-    if(k == 5){
+    if(k > game_over + 1){
+      console.log('game over');
       console.log(letters);
+      io.sockets.emit("game over", letters);
     }
   });
   
   socket.on("send letters", function(data){
     for(var i = 0; i < p; i++) {
-      msg = [players[(i+k)%p], letters[players[(i+k)%p]], k];
+      msg = [players[(i+k)%p], letters[players[(i+k)%p]], k, game_over];
       io.to(players[i]).emit('send letter', msg);
     }
     k = k + 1;
@@ -64,12 +64,17 @@ io.on('connection', function (socket) {
   socket.on("start game", function(data){
     p = players.length;
     letters = {};
-    k = 0;
+    k = 1;
     letters_received = 0;
+    game_over = 2;
     for(var i = 0; i < p; i++) {
       letters[players[i]] = []
     }
     io.sockets.emit("start game");
+  });
+
+  socket.on("loggar", function(data){
+    console.log(data)
   });
   
 });

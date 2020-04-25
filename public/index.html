@@ -15,7 +15,7 @@
         <br>
         <p id="rou">Round: 0</p>        
         <form id="messageForm">	
-            <input type="text" id="d" placeholder="" disabled/>
+            <input type="text" id="d" placeholder="comeca a historinha" disabled/>
             <br>
             <input type="text" id="messageInput" placeholder="Sua contribuicao" disabled/>
             <br>
@@ -24,6 +24,7 @@
             <button type="submit" id="btn" onclick="hidel()" disabled > Dobrar </button>
             <br>
         </form>
+        <textarea id="printed" cols="40" rows="5" disabled></textarea>
 
      <!--   <div id="memechat"> 
             <p id="p">N Players</p>
@@ -58,7 +59,7 @@
             var $dobrarBtn = $("#btn")
             var $messageInput = $("#messageInput"); //ref to input box with id message
             var $messageInput2 = $("#messageInput2"); //ref to input box with id message
-            var $chat = $("#chat"); //ref to div chat
+            var $printed = $("#printed"); 
             var writing_in = 0;
 
             $messageForm.submit(function(e){
@@ -69,6 +70,7 @@
                 btn.disabled = true;
                 $messageInput.val("");
                 $messageInput2.val("");
+                $dica.val("(pera aih q tao escrevendo)");
             });
 
             socket.on("new message", function(data){
@@ -90,8 +92,7 @@
                 letter = data[1];
                 var btn = document.getElementById("btn");
                 btn.disabled = false;
-                $round.text('Round: ' + data[2]); 
-
+                $round.text('Round: ' + data[2] + ' de ' + data[3]); 
                 $dica.val(letter[letter.length - 1]);
                 if (letter.length > 1){
                     $dica.val(letter[letter.length - 1]);
@@ -99,6 +100,7 @@
             });
 
             socket.on("start game", function(data){
+                $dica.val("");
                 var minput = document.getElementById("messageInput");
                 minput.disabled = false;
                 var btn = document.getElementById("btn");
@@ -108,6 +110,31 @@
                 var btn1 = document.getElementById("btn1");
                 btn1.disabled = true;
             });
+
+            socket.on("game over", function(data){
+                var minput = document.getElementById("messageInput");
+                minput.disabled = true;
+                var btn = document.getElementById("btn");
+                btn.disabled = true;
+                var minput = document.getElementById("messageInput2");
+                minput.disabled = true;
+                var btn1 = document.getElementById("btn1");
+                btn1.disabled = false;
+                $dica.val("caboou!");
+                $round.text('Round: '); 
+                var printletters = document.getElementById("printed");
+                let keys = Object.keys(data);
+                for (let i=0; i < keys.length; i++) { 
+                    socket.emit("loggar", data[keys[i]])
+                    for (let j=0; j < data[keys[i]].length; j++){
+                        printletters.value += data[keys[i]][j];
+                        printletters.value += " ";
+                    }
+                printletters.value += "\n";
+                printletters.value += "\n";
+                }
+            });
+
 
         });
 
