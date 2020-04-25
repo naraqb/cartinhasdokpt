@@ -1,0 +1,295 @@
+<html>
+	<head>
+		<title> cartinhasdokpt</title>
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+	</head>
+	
+    <body>
+        <p id="p">Cartinhsa do Kpt</p>
+        <p id="pr">Pessoas: 0</p>
+        <button type="submit" id="btn1" onclick="startgame()"> Comecar </button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <form id="messageForm">	
+            <br>
+            <input type="text" id="d" placeholder="" disabled/>
+            <br>
+            <input type="text" id="messageInput" placeholder="Sua contribuicao" disabled/>
+            <br>
+            <input type="text" id="messageInput2" placeholder="Final da contribuicao e dica para o amiguinho" disabled/>
+            <br>
+            <button type="submit" id="btn" onclick="hidel()" disabled > Dobrar </button>
+            <br>
+        </form>
+
+     <!--   <div id="memechat"> 
+            <p id="p">N Players</p>
+            <p id="pr"> 0</p>
+            <button type="submit" id="btn1" onclick="startgame()"> Comecar </button>
+        </div> 
+        <br>
+        <div id="holder">
+            <form id="messageForm">	
+                <input type="text" id="d" placeholder="" disabled/>
+                <input type="text" id="messageInput" placeholder="Sua contribuicao" disabled/>
+                <input type="text" id="messageInput2" placeholder="Final da contribuicao e dica para o amiguinho" disabled/>
+                <button type="submit" id="btn" onclick="hidel()" disabled > Dobrar </button>
+            </form>
+             <div class="chat" id="chat" style="overflow-y:scroll; height:450px;">
+                <div id="messageBox"> </div>
+            </div>
+        </div>
+        <button type="submit"  id="btn1" onclick="showl()"> Show All </button>
+        <div id="people" style="overflow-y:scroll; height:450px;"></div>              -->
+    </body>
+
+    <script>
+        var socket = io.connect();  //connects to socket
+
+        $(function(){
+            var $nplayers = $("#pr");
+            var $dica = $("#d");
+            var $people = $("#people");
+            var $messageForm = $("#messageForm"); //ref to the div message form
+            var $dobrarBtn = $("#btn")
+            var $messageInput = $("#messageInput"); //ref to input box with id message
+            var $messageInput2 = $("#messageInput2"); //ref to input box with id message
+            var $chat = $("#chat"); //ref to div chat
+            var writing_in = 0;
+
+            $messageForm.submit(function(e){
+                e.preventDefault();
+                msg = [writing_in, $messageInput.val(), $messageInput2.val()];
+                socket.emit("write in letter", msg);
+                var btn = document.getElementById("btn");
+                btn.disabled = true;
+                $messageInput.val("");
+                $messageInput2.val("");
+            });
+
+            socket.on("new message", function(data){
+                if(data.msg.length > 0){
+                    $chat.append('<br>'  +'<div id="circle"> ' + '<textarea id="t" readonly>' + data.msg + '</textarea>'+' </div>' + '<br>' );
+                }
+            });
+
+            socket.on("new player", function(data){
+                $nplayers.text('Pessoas: ' + data);
+            });
+
+            socket.on("player left", function(data){
+                $nplayers.text('Pessoas: ' + data);  
+            });
+
+            socket.on("send letter", function(data){
+                writing_in = data[0];
+                letter = data[1];
+                var btn = document.getElementById("btn");
+                btn.disabled = false;
+                $dica.val(letter[letter.length - 1]);
+                if (letter.length > 1){
+                    $dica.val(letter[letter.length - 1]);
+                }
+            });
+
+            socket.on("start game", function(data){
+                var minput = document.getElementById("messageInput");
+                minput.disabled = false;
+                var btn = document.getElementById("btn");
+                btn.disabled = false;
+                var minput = document.getElementById("messageInput2");
+                minput.disabled = false;
+                var btn1 = document.getElementById("btn1");
+                btn1.disabled = true;
+            });
+
+        });
+
+        // showlog = false;
+        // window.setInterval(function() {
+        //     if(showlog == false){
+        //         var chat = document.getElementById("chat");
+        //         chat.scrollTop = chat.scrollHeight;
+
+        //         var people = document.getElementById("people");
+        //         people.scrollTop = people.scrollHeight;
+        //     }
+        // }, 4);
+
+        function startgame(){
+            socket.emit("start game");
+            socket.emit("send letters");
+        }
+
+        function showl(){
+            showlog = true;
+            var chat = document.getElementById("chat");
+            chat.scrollTop = chat.scrollHeight;
+            var people = document.getElementById("people");
+            people.scrollTop = people.scrollHeight;
+            showlog = false;
+        }
+
+        function hidel(){}
+    </script>
+
+    <style>
+        body{
+            background-color:#1abc9c;
+        }
+        #d{
+            margin-left: 0px;
+            text-align:center;
+            border-radius:10px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #p{
+            margin-left: 0px;
+            text-align:left;
+            border-radius:0px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #people{
+            background-color: #f1c40f;
+            width:250px;
+            height:440px;
+            margin-left:767px;
+            margin-top:-462px;
+            border: 6px solid white;
+        }
+        #pr{
+            margin-left: 0px;
+            text-align:left;
+            border-radius:0px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #memechat{
+            background-color:#e74c3c;
+            font-family: verdana;
+            color:white;
+            font-size: 30px;
+            text-align:center;
+            border: 2px solid white;
+            border-radius:15px;
+            width:190px;
+            height:60px;
+        }
+        #btn{
+            background-color: white;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:150px;
+            height:50px;
+            text-align: center;
+            margin-left:0px;
+            border-radius:10px;
+            outline:none;
+            border: 2px solid #e74c3c;
+        }
+        #btn1{
+            background-color: white;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:150px;
+            height:50px;
+            text-align: center;
+            margin-left:0px;
+            margin-top: -40px;
+            border-radius:10px;
+            outline:none;
+            border: 2px solid #e74c3c;
+        }
+        #messageInput{
+            margin-left: 0px;
+            text-align:center;
+            border-radius:10px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #messageInput2{
+            margin-left: 0px;
+            text-align:center;
+            border-radius:10px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:400px;
+            height:50px;
+        }
+        #t {
+            text-align:left;
+            font-size:15px;
+            font-family: Verdana;
+            color:black;
+            border: 2px solid #f1c40f;
+            margin-top: -5px;
+            margin-left: 72px;
+            width:200px;
+            height:90px;
+            background-color:white;
+            border-radius:12px;
+            resize: none;
+                outline: none;
+        }
+        #chat{
+            border: 6px solid white;
+            width:459px;
+            background-color:#e74c3c;
+            margin:auto;
+            border-radius: 10px;
+            margin-left:300px;
+        }
+        ::-webkit-scrollbar { 
+            display: none;
+        }
+        #circle{
+            width:50px;
+            height:50px;
+            border-radius:100px;
+            border: 5px solid white;
+            margin-left:25px;
+            background-color:#f1c40f;
+        }
+        #circle1{
+            width:50px;
+            height:50px;
+            border-radius:100px;
+            border: 5px solid white;
+            margin-left:25px;
+            background-color:#3498db;
+        }
+
+    </style>
+
+</html>
