@@ -41,7 +41,7 @@ io.on('connection', function (socket) {
 
     if(letters_received == p){
       for(var i = 0; i < p; i++) {
-        msg = [players[(i+k)%p], letters[players[(i+k)%p]]];
+        msg = [players[(i+k)%p], letters[players[(i+k)%p]], k];
         io.to(players[i]).emit('send letter', msg);
       }
       k = k + 1;
@@ -63,7 +63,6 @@ io.on('connection', function (socket) {
 
   socket.on("start game", function(data){
     p = players.length;
-    players = [];
     letters = {};
     k = 0;
     letters_received = 0;
