@@ -92,6 +92,7 @@
                 letter = data[1];
                 var btn = document.getElementById("btn");
                 btn.disabled = false;
+                document.getElementById("messageInput").focus();
                 $round.text('Round: ' + data[2] + ' de ' + data[3]); 
                 $dica.val(letter[letter.length - 1]);
                 if (letter.length > 1){
@@ -105,8 +106,8 @@
                 minput.disabled = false;
                 var btn = document.getElementById("btn");
                 btn.disabled = false;
-                var minput = document.getElementById("messageInput2");
-                minput.disabled = false;
+                var minput2 = document.getElementById("messageInput2");
+                minput2.disabled = false;
                 var btn1 = document.getElementById("btn1");
                 btn1.disabled = true;
             });
