@@ -61,7 +61,7 @@ io.on('connection', function (socket) {
     k = k + 1;
   });
 
-  socket.on("start game", function(data){
+  socket.on("buceta lolipop", function(data){
     p = players.length;
     letters = {};
     k = 1;
@@ -70,7 +70,7 @@ io.on('connection', function (socket) {
     for(var i = 0; i < p; i++) {
       letters[players[i]] = []
     }
-    io.sockets.emit("start game");
+    io.sockets.emit("buceta lolipop");
   });
 
   socket.on("loggar", function(data){

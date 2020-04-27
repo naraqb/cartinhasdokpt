@@ -6,26 +6,29 @@
 	</head>
 	
     <body>
-        <p id="p">Cartinhsa do Kpt</p>
-        <p id="pr">Pessoas: 0</p>
-        <button type="submit" id="btn1" onclick="startgame()"> Comecar </button>
-        <br>
-        <br>
-        <br>
-        <br>
-        <p id="rou">Round: 0</p>        
-        <form id="messageForm">	
-            <input type="text" id="d" placeholder="comeca a historinha" disabled/>
-            <br>
-            <input type="text" id="messageInput" placeholder="Sua contribuicao" disabled/>
-            <br>
-            <input type="text" id="messageInput2" placeholder="Final da contribuicao e dica para o amiguinho" disabled/>
-            <br>
-            <button type="submit" id="btn" onclick="hidel()" disabled > Dobrar </button>
-            <br>
-        </form>
-        <textarea id="printed" cols="80" rows="10" ></textarea>
+        <p id="p">CARTINHSA DO KPT</p>
+        <img id="diversao" src="https://res.cloudinary.com/twenty20/private_images/t_watermark-criss-cross-10/v1581262353000/photosp/3be66217-959f-436c-901f-34fd9880aacb/stock-photo-people-happiness-home-person-jump-leap-couch-on-at-home-3be66217-959f-436c-901f-34fd9880aacb.jpg" alt="fiquem em casa">
 
+        <p id="pr">QUARENTENERS:: 0</p>
+        <button type="submit" id="btn1" onclick="startgame()"> COMECA </button>
+        <br>
+        <br>
+        <br>
+        <p id="rou">LINHAS: 0</p>        
+        <form id="messageForm">	
+            <input type="text" id="d" placeholder="na linha 1, comece a historia livremente, depois havera dicas " disabled/>
+            <br>
+            <input type="text" id="messageInput" placeholder="sua contribuicao" disabled/>
+            <br>
+            <input type="text" id="messageInput2" placeholder="final da contribuicao e dica para o amiguinho" disabled/>
+            <br>
+            <button type="submit" id="btn" onclick="hidel()" disabled > DORBRAR </button>
+        </form>
+        <br>
+        <br>
+        <div>
+        <textarea id="lettersbox" placeholder="aqui aparecem os resultados depois do jogo e na vdd o botao dorbrar eh meio inutil pq vc pode jogar soh apertando enter para enviar" cols="80" rows="10" ></textarea>
+        </div>
      <!--   <div id="memechat"> 
             <p id="p">N Players</p>
             <p id="pr"> 0</p>
@@ -59,7 +62,7 @@
             var $dobrarBtn = $("#btn")
             var $messageInput = $("#messageInput"); //ref to input box with id message
             var $messageInput2 = $("#messageInput2"); //ref to input box with id message
-            var $printed = $("#printed"); 
+            var $lettersbox = $("#lettersbox"); 
             var writing_in = 0;
 
             $messageForm.submit(function(e){
@@ -68,6 +71,7 @@
                 socket.emit("write in letter", msg);
                 var btn = document.getElementById("btn");
                 btn.disabled = true;
+                document.getElementById("messageInput").focus();
                 $messageInput.val("");
                 $messageInput2.val("");
                 $dica.val("(pera aih q tao escrevendo)");
@@ -80,11 +84,11 @@
             });
 
             socket.on("new player", function(data){
-                $nplayers.text('Pessoas: ' + data);
+                $nplayers.text('QUARENTENERS:: ' + data);
             });
 
             socket.on("player left", function(data){
-                $nplayers.text('Pessoas: ' + data);  
+                $nplayers.text(' QUARENTENERS:: ' + data);  
             });
 
             socket.on("send letter", function(data){
@@ -92,15 +96,14 @@
                 letter = data[1];
                 var btn = document.getElementById("btn");
                 btn.disabled = false;
-                document.getElementById("messageInput").focus();
-                $round.text('Round: ' + data[2] + ' de ' + data[3]); 
+                $round.text('LINHAS: ' + data[2] + ' DE ' + data[3]); 
                 $dica.val(letter[letter.length - 1]);
                 if (letter.length > 1){
                     $dica.val(letter[letter.length - 1]);
                 }
             });
 
-            socket.on("start game", function(data){
+            socket.on("buceta lolipop", function(data){
                 $dica.val("");
                 var minput = document.getElementById("messageInput");
                 minput.disabled = false;
@@ -123,7 +126,7 @@
                 btn1.disabled = false;
                 $dica.val("caboou!");
                 $round.text('Round: '); 
-                var printletters = document.getElementById("printed");
+                var printletters = document.getElementById("lettersbox");
                 let keys = Object.keys(data);
                 for (let i=0; i < keys.length; i++) { 
                     socket.emit("loggar", data[keys[i]])
@@ -151,7 +154,7 @@
         // }, 4);
 
         function startgame(){
-            socket.emit("start game");
+            socket.emit("buceta lolipop");
             socket.emit("send letters");
         }
 
@@ -171,6 +174,16 @@
         body{
             background-color:#1abc9c;
         }
+        #diversao{
+            margin-left: 520px;
+            margin-bottom: -100px;
+            margin-top: -60px;
+            vertical-align: top;
+            border-radius:10px;
+            border: 3px solid #e74c3c;
+            width:230px;
+            height:150px;
+        }
         #d{
             margin-left: 0px;
             text-align:center;
@@ -180,7 +193,7 @@
             font-size:15px;
             font-family: 'Comic Sans MS';
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
         }
         #p{
@@ -189,10 +202,11 @@
             border-radius:0px;
             outline:none;
             shadow:none;
-            font-size:15px;
+            font-size:17px;
             font-family: 'Comic Sans MS';
+            font-weight: bold;
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
         }
         #people{
@@ -212,7 +226,7 @@
             font-size:15px;
             font-family: 'Comic Sans MS';
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
         }
         #rou{
@@ -221,10 +235,11 @@
             border-radius:0px;
             outline:none;
             shadow:none;
+            margin-bottom: -25px;
             font-size:15px;
             font-family: 'Comic Sans MS';
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
         }
         #memechat{
@@ -233,7 +248,8 @@
             color:white;
             font-size: 30px;
             text-align:center;
-            border: 2px solid white;
+            margin-bottom: -40px;
+            border: 5px solid white;
             border-radius:15px;
             width:190px;
             height:60px;
@@ -249,7 +265,7 @@
             margin-left:0px;
             border-radius:10px;
             outline:none;
-            border: 2px solid #e74c3c;
+            border: 3px solid #e74c3c;
         }
         #btn1{
             background-color: white;
@@ -263,7 +279,7 @@
             margin-top: -40px;
             border-radius:10px;
             outline:none;
-            border: 2px solid #e74c3c;
+            border: 3px solid #e74c3c;
         }
         #messageInput{
             margin-left: 0px;
@@ -274,7 +290,7 @@
             font-size:15px;
             font-family: 'Comic Sans MS';
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
         }
         #messageInput2{
@@ -286,8 +302,20 @@
             font-size:15px;
             font-family: 'Comic Sans MS';
             color:black;
-            width:700px;
+            width:750px;
             height:50px;
+        }
+        #lettersbox{
+            margin-left: 0px;
+            text-align:left;
+            border-radius:10px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:750px;
+            height:200px;
         }
         #t {
             text-align:left;
