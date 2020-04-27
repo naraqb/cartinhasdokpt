@@ -26,7 +26,7 @@ io.on('connection', function (socket) {
   socket.on("disconnect", function(data){		
 		players.splice(players.indexOf(socket.id), 1); //accessing the array memers
     io.sockets.emit("player left", players.length); //checks if player left
-    
+    io.sockets.emit("game over", letters);
     console.log('someone disconnected: ', socket.id);
     console.log("players connected: %s", players.length);
   });
@@ -35,7 +35,6 @@ io.on('connection', function (socket) {
     letters[data[0]].push(data[1]);
     letters[data[0]].push(data[2]);
     letters_received = letters_received + 1;
-    console.log(letters);
 
     if(letters_received == p){
       for(var i = 0; i < p; i++) {
@@ -47,8 +46,8 @@ io.on('connection', function (socket) {
     }
 
     if(k > game_over + 1){
-      console.log('game over');
-      console.log(letters);
+      //console.log('game over');
+      //console.log(letters);
       io.sockets.emit("game over", letters);
     }
   });
