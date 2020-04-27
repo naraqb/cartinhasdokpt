@@ -10,7 +10,12 @@
         <img id="diversao" src="https://res.cloudinary.com/twenty20/private_images/t_watermark-criss-cross-10/v1581262353000/photosp/3be66217-959f-436c-901f-34fd9880aacb/stock-photo-people-happiness-home-person-jump-leap-couch-on-at-home-3be66217-959f-436c-901f-34fd9880aacb.jpg" alt="fiquem em casa">
 
         <p id="pr">QUARENTENERS:: 0</p>
-        <button type="submit" id="btn1" onclick="startgame()"> COMECA </button>
+        <br>
+        <form id="galera">
+            <input type="text" id="g" placeholder="qnts linhas?">
+            <button type="submit" id="btn1""> COMECA </button>
+            <!-- <button type="submit" id="btn1" onclick="startgame()"> COMECA </button> -->
+        </form>
         <br>
         <br>
         <br>
@@ -29,25 +34,6 @@
         <div>
         <textarea id="lettersbox" placeholder="aqui aparecem os resultados depois do jogo e na vdd o botao dorbrar eh meio inutil pq vc pode jogar soh apertando enter para enviar" cols="80" rows="10" ></textarea>
         </div>
-     <!--   <div id="memechat"> 
-            <p id="p">N Players</p>
-            <p id="pr"> 0</p>
-            <button type="submit" id="btn1" onclick="startgame()"> Comecar </button>
-        </div> 
-        <br>
-        <div id="holder">
-            <form id="messageForm">	
-                <input type="text" id="d" placeholder="" disabled/>
-                <input type="text" id="messageInput" placeholder="Sua contribuicao" disabled/>
-                <input type="text" id="messageInput2" placeholder="Final da contribuicao e dica para o amiguinho" disabled/>
-                <button type="submit" id="btn" onclick="hidel()" disabled > Dobrar </button>
-            </form>
-             <div class="chat" id="chat" style="overflow-y:scroll; height:450px;">
-                <div id="messageBox"> </div>
-            </div>
-        </div>
-        <button type="submit"  id="btn1" onclick="showl()"> Show All </button>
-        <div id="people" style="overflow-y:scroll; height:450px;"></div>              -->
     </body>
 
     <script>
@@ -56,6 +42,8 @@
         $(function(){
             var $nplayers = $("#pr");
             var $round = $("#rou");
+            var $g = $("#g");
+            var $galera = $("#galera");
             var $dica = $("#d");
             var $people = $("#people");
             var $messageForm = $("#messageForm"); //ref to the div message form
@@ -77,10 +65,12 @@
                 $dica.val("(pera aih q tao escrevendo)");
             });
 
-            socket.on("new message", function(data){
-                if(data.msg.length > 0){
-                    $chat.append('<br>'  +'<div id="circle"> ' + '<textarea id="t" readonly>' + data.msg + '</textarea>'+' </div>' + '<br>' );
-                }
+            $galera.submit(function(f){
+                nlinhas = $g.val();
+                $g.val("");
+                f.preventDefault();
+                socket.emit("buceta lolipop", nlinhas);
+                socket.emit("send letters");
             });
 
             socket.on("new player", function(data){
@@ -113,6 +103,8 @@
                 minput2.disabled = false;
                 var btn1 = document.getElementById("btn1");
                 btn1.disabled = true;
+                var qntslinhsa = document.getElementById("g");
+                qntslinhsa.disabled = true;
             });
 
             socket.on("game over", function(data){
@@ -142,21 +134,11 @@
 
         });
 
-        // showlog = false;
-        // window.setInterval(function() {
-        //     if(showlog == false){
-        //         var chat = document.getElementById("chat");
-        //         chat.scrollTop = chat.scrollHeight;
-
-        //         var people = document.getElementById("people");
-        //         people.scrollTop = people.scrollHeight;
-        //     }
-        // }, 4);
-
-        function startgame(){
-            socket.emit("buceta lolipop");
-            socket.emit("send letters");
-        }
+        // function startgame(){
+        //     nlinhas = $g.val();
+        //     socket.emit("buceta lolipop", nlinhas);
+        //     socket.emit("send letters");
+        // }
 
         function showl(){
             showlog = true;
@@ -280,6 +262,23 @@
             border-radius:10px;
             outline:none;
             border: 3px solid #e74c3c;
+        }
+        #g{
+            margin-left: 0px;
+            text-align:center;
+            border-radius:10px;
+            outline:none;
+            shadow:none;
+            font-size:15px;
+            font-family: 'Comic Sans MS';
+            color:black;
+            width:100px;
+            height:50px;
+        }
+        #galera{
+            margin-left: 0px;
+            border-radius:10px;
+            margin-top: -60px;
         }
         #messageInput{
             margin-left: 0px;
